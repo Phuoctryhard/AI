@@ -82,5 +82,3 @@ TRAINING_SCRIPT = os.path.join(MAIN_FOLDER_PATH, paths['APIMODEL_PATH'], 'resear
 command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps=2000".format(TRAINING_SCRIPT, MAIN_FOLDER_PATH + '/' + paths['CHECKPOINT_PATH'], MAIN_FOLDER_PATH + '/' + files['PIPELINE_CONFIG'])
 
 os.system(command)
-
-#lấy 2 thùng bia cho ông hưng căng tin
