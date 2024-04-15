@@ -5,12 +5,11 @@ from object_detection.utils import config_util
 from object_detection.protos import pipeline_pb2
 from google.protobuf import text_format
 
-
 if tf.config.list_physical_devices('GPU'):
     physical_devices = tf.config.list_physical_devices('GPU')
     tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
     tf.config.experimental.set_virtual_device_configuration(physical_devices[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4000)])
-    
+
 CUSTOM_MODEL_NAME = 'my_ssd_mobnet' 
 PRETRAINED_MODEL_NAME = 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'
 PRETRAINED_MODEL_URL = 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz'
