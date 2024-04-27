@@ -105,7 +105,7 @@ def get_detections(img, detections):
     height, width, _ = img_crop.shape
     cv2.imwrite(os.path.join(result_folder_path, "cropped_image.jpg"), img_crop)
 
-    if height < 200 or width < 200:
+    if height < 100 and width < 100:
         command_improve_img_resolution = f"python {improve_img_resolution_file_path} {os.path.join(result_folder_path, 'cropped_image.jpg')} {os.path.join(result_folder_path, 'cropped_image.jpg')}"
         os.system(command_improve_img_resolution)
 

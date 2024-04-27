@@ -62,7 +62,6 @@ def delete_img_dir(dir_path, label):
             img_path = os.path.join(dir_path, label, img)
             os.remove(img_path)
 
-clearDir(r'D:\Code_school_nam3ki2\TestModel\letter_dataset_result')
 # list_label_need = ['4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']
 
 # list_img_need = [
