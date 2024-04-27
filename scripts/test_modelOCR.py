@@ -19,7 +19,7 @@ label_path = 'config\\label_map.pbtxt'
 checkpoint_path = 'model\\detect_liscense_plate'
 test_folder_path = r'D:\detection\train'
 result_folder_path = r'D:\Code_school_nam3ki2\TestModel\images_result'
-improve_img_resolution_file_path = r'D:\Code_school_nam3ki2\TestModel\model\improve_img_resolution\test.py'
+improve_img_resolution_file_path = r'D:\Code_school_nam3ki2\TestModel\model\improve_image_resolution\test.py'
 letter_extract_result_folder_path = r'D:\Code_school_nam3ki2\TestModel\letter_extract_result'
 letter_dataset_result_folder_path = r'D:\Code_school_nam3ki2\TestModel\letter_dataset_result'
 
