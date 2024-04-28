@@ -17,7 +17,7 @@ config_path = 'config\\pipeline.config'
 model_character_path = r'D:\Code_school_nam3ki2\TestModel\model\classfication_character\model_license_plate_v9.h5'
 label_path = 'config\\label_map.pbtxt'
 checkpoint_path = 'model\\detect_liscense_plate'
-test_folder_path = r'D:\detection\train'
+test_folder_path = r'D:\extract_character'
 result_folder_path = r'D:\Code_school_nam3ki2\TestModel\images_result'
 improve_img_resolution_file_path = r'D:\Code_school_nam3ki2\TestModel\model\improve_image_resolution\test.py'
 letter_extract_result_folder_path = r'D:\Code_school_nam3ki2\TestModel\letter_extract_result'
@@ -43,7 +43,7 @@ def detect_fn(image):
 def pre_process(img, W):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(img_gray, (3, 3), 0)
-    binary = binary = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, int(W/10) if int(W/10)%2 !=0  else int(W/10)+1, 10)
+    binary = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, int(W/10) if int(W/10)%2 !=0  else int(W/10)+1, 10)
     return binary
 
 def predict_license_plate(IMAGE_PATH):
@@ -76,7 +76,10 @@ def predict_license_plate(IMAGE_PATH):
 
 def maximizeContrast(imgGrayscale):
     #Làm cho độ tương phản lớn nhất
-    height, width, _ = imgGrayscale.shape
+    if len(imgGrayscale.shape) == 3:
+        height, width, _ = imgGrayscale.shape
+    else:
+        height, width = imgGrayscale.shape
 
     imgTopHat = np.zeros((height, width, 1), np.uint8)
     imgBlackHat = np.zeros((height, width, 1), np.uint8)
@@ -100,8 +103,7 @@ def get_detections(img, detections):
     Y = ymin
     W = xmax - xmin
     H = ymax - ymin
-    img_crop = img[int(Y)-10: int(Y)+int(H) + 10, int(X)-10: int(X)+int(W)+10]
-
+    img_crop = img[int(Y)-10: int(Y)+int(H) + 10, int(X)-10: int(X)+int(W)+10] if int(Y)-5 > 0 and int(X)-5 > 0 else img[int(Y): int(Y)+int(H), int(X): int(X)+int(W)]
     height, width, _ = img_crop.shape
     cv2.imwrite(os.path.join(result_folder_path, "cropped_image.jpg"), img_crop)
 
@@ -110,7 +112,6 @@ def get_detections(img, detections):
         os.system(command_improve_img_resolution)
 
     img_crop = cv2.imread(os.path.join(result_folder_path, "cropped_image.jpg"))
-    
     return img_crop, W
 
 def predict_image(image_path, model):
@@ -136,49 +137,123 @@ def predict_image_2(img, model):
     predicted_label = labels[np.argmax(pred)]
     return predicted_label
 
-def segmentation(IMAGE_PATH):
+def segmentation(IMAGE_PATH, model_character):
     image_np_with_detections, img, results = predict_license_plate(IMAGE_PATH)
-    # cv2.imshow('image_np_with_detections', image_np_with_detections)
-    # cv2.waitKey()
-    # cv2.destroyAllWindows()
+    cv2.imshow('image_np_with_detections', image_np_with_detections)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
     img_crop, W = get_detections(img, results)
-    # cv2.imshow('img_crop', img_crop)
-    # cv2.waitKey()
-    # cv2.destroyAllWindows()
+    cv2.imshow('img_crop', img_crop)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
     binary = pre_process(img_crop, W)
-    # cv2.imshow('binary', binary)
-    # cv2.waitKey()
-    # cv2.destroyAllWindows()
+    cv2.imshow('binary', binary)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary, connectivity=8)
-    print("Num_labels:", num_labels)
     candidates = []
     bounding_rects = []
+    list_character = []
+    i = 0
     for label in range(1, num_labels):
         # Tạo mask chứa các pixel có nhãn cùng là label
         mask = np.zeros(binary.shape, dtype=np.uint8)
         mask[labels == label] = 255 # Các các pixel cùng nhãn giá trị 255
         # Tìm contours từ mask
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Lọc contours theo tiêu chí aspect ratio, solidity và height ratio
         for contour in contours:
-            if cv2.contourArea(contour) < 100:
-                continue
             x, y, w, h = cv2.boundingRect(contour)
             aspect_ratio = w / float(h)
             solidity = cv2.contourArea(contour) / float(w * h)
             height_ratio = h / float(binary.shape[0])
+
             # Kiểm tra các điều kiện để loại bỏ nhiễu như dâu "." hay "-"
-            if 0.2 < aspect_ratio < 0.8 and solidity > 0.1 and 0.2 < height_ratio < 1:
+            if 0.2 < aspect_ratio < 0.8 and solidity > 0.1 and 0.2 < height_ratio < 1.0:
                 bounding_rects.append((x, y, w, h))
                 # Trích xuất ký tự
-                # Kiểm tra xem các điều chỉnh tọa độ có làm cho tọa độ nằm ngoài hình ảnh hay không
                 y_start = max(0, y-3)
-                y_end = min(img_crop.shape[0], y + h + 3)
-                x_start = max(0, x - int(h*3/10 - w/2))
-                x_end = min(img_crop.shape[1], x + w + int(h*3/10 - w/2))
+                y_end = min(binary.shape[0], y + h + 3)
+                x_start = max(0, x-int(h*13/40-w/2))
+                x_end = min(binary.shape[1], x + w+int(h*13/40-w/2))
                 # Trích xuất ký tự
                 character = img_crop[y_start:y_end, x_start:x_end]
-                candidates.append(character) 
-    return candidates     
+                # character = img_crop[y-3: y + h+3, x-int(h*13/40-w/2):x + w+int(h*13/40-w/2)]
+                candidates.append((x, y, character))
+                
+        if candidates[-1][1]/float(candidates[0][1]) > 2:  
+            list_character_first = []
+            list_character_second = []          
+            first_lines = [item for item in candidates if (candidates[-1][1]/float(item[1])) >= 2.0 ]
+            second_lines = [item for item in candidates if (candidates[-1][1]/float(item[1])) < 2.0 ]
+            first_lines.sort(key=lambda item: item[0])
+            first_lines = [item for item in first_lines]
+            second_lines.sort(key=lambda item: item[0])
+            second_lines = [item for item in second_lines]
+            for first_line in first_lines:
+                    i+=1
+                    filename = f"region_{i}.jpg"
+                    cv2.imwrite(filename, first_line[2])
+                    list_character_first.append(predict_image(filename,model_character))
+
+            for second_line in second_lines:
+                    i+=1
+                    filename = f"region_{i}.jpg"
+                    cv2.imwrite(filename, second_line[2])
+                    list_character_second.append(predict_image(filename,model_character))
+            print(list_character_first)
+            print(list_character_second)
+        else:
+            candidates.sort(key=lambda item: item[0])
+            candidates = [item for item in candidates]     
+            for character in candidates:
+                    i+=1
+                    filename = f"region_{i}.jpg"
+                    cv2.imwrite(filename, character[2])
+                    list_character.append(predict_image(filename,model_character))
+            print(list_character)
+        # num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary, connectivity=8)
+        # print("Num_labels:", num_labels)
+        # candidates = []
+        # candidates_line1 = []
+        # candidates_line2 = []
+        # bounding_rects = []
+
+    # # Sắp xếp lại stats theo tọa độ y để đảm bảo thứ tự từ trên xuống dưới
+    # sorted_stats = sorted([stats[i] for i in range(1, num_labels)], key=lambda s: s[cv2.CC_STAT_LEFT])
+
+    # for stat in sorted_stats:
+    #     # Lấy thông tin từng ký tự
+    #     x = stat[cv2.CC_STAT_LEFT]
+    #     y = stat[cv2.CC_STAT_TOP]
+    #     w = stat[cv2.CC_STAT_WIDTH]
+    #     h = stat[cv2.CC_STAT_HEIGHT]
+    #     area = stat[cv2.CC_STAT_AREA]
+
+    #     aspect_ratio = w / float(h)
+    #     solidity = area / float(w * h)
+    #     height_ratio = h / float(binary.shape[0])
+
+    #     # Điều chỉnh các điều kiện lọc dựa trên mô tả hình ảnh
+    #     if 0.2 < aspect_ratio < 0.8 and solidity > 0.1 and 0.2 < height_ratio < 1:
+    #         bounding_rects.append((x, y, w, h))
+    #         # Điều chỉnh tọa độ để trích xuất ký tự
+    #         y_start = max(0, y-5)
+    #         y_end = min(binary.shape[0], y + h + 5)
+    #         x_start = max(0, x - 3)
+    #         x_end = min(binary.shape[1], x + w + 3)
+    #         # Trích xuất ký tự
+    #         character = img_crop[y_start:y_end, x_start:x_end]
+    #         if y < binary.shape[0] // 2:
+    #             candidates_line1.append(character)
+    #         else:
+    #             candidates_line2.append(character)
+
+    # if len(candidates_line1) > 0 and len(candidates_line2) > 0:
+    #     candidates = candidates_line1 + candidates_line2
+    # else:
+    #     candidates = candidates_line1 if len(candidates_line1) > 0 else candidates_line2     
 
 # Define a function to extract the number from the filename
 def extract_number(filename):
@@ -186,19 +261,9 @@ def extract_number(filename):
     x = x.group() if x else -1
     return int(x)
 
-listImgTest = os.listdir(test_folder_path)
-listImgTest = [os.path.join(test_folder_path, img) for img in listImgTest if not img.endswith('.xml')]
-# listImgTest.sort(key=extract_number)
-
-# for IMAGE_PATH in listImgTest:
-#     list_char = []
-#     print(f"Progress predict image: {IMAGE_PATH}")
-#     candidates = segmentation(IMAGE_PATH)
-#     for i, candidate in enumerate(candidates, 0):
-#         predicted_label = predict_image_2(candidate, models.load_model(model_character_path))
-#         print(f"Predicted label: {predicted_label}")
-#         list_char.append(predicted_label)
-#     print("".join(list_char))
+# listImgTest = os.listdir(test_folder_path)
+# listImgTest = [os.path.join(test_folder_path, img) for img in listImgTest if not img.endswith('.xml')]
+# listImgTest.sort(reverse=True)
         
 
 def test_predict_image(path, model_character_path):
@@ -239,13 +304,12 @@ def extract_letter_from_dir(listImgTest):
 
 
 
-extract_letter_from_dir(listImgTest)
+# extract_letter_from_dir(listImgTest)
 # test_predict_image(letter_extract_result_folder_path, model_character_path)
 
-# for filename in os.listdir(letter_extract_result_folder_path)[:10]:
-#     IMAGE_PATH = os.path.join(letter_extract_result_folder_path, filename)
-#     print(f"Progress predict image: {IMAGE_PATH}")
-    
-#     command = f"python {improve_img_resolution_file_path} {IMAGE_PATH} {IMAGE_PATH}"
-#     os.system(command)
+# for IMAGE_PATH in listImgTest:
+IMAGE_PATH = r"D:\extract_character\xemay2363_jpg.rf.56dec3d199b44526f62fed5dac123c62.jpg"
+model = models.load_model(model_character_path)
+# for IMAGE_PATH in listImgTest:
+segmentation(IMAGE_PATH, model)
     

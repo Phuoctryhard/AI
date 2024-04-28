@@ -44,6 +44,12 @@ def create_folder(folder):
         if not os.path.exists(label_path):
             os.makedirs(label_path)
     
+def Check_file_cnt_in_folder(folder):
+    subfolder = [subfolder for subfolder in os.listdir(folder) if os.path.isdir(os.path.join(folder, subfolder))]
+    for sub in subfolder:
+        sub_path = os.path.join(folder, sub)
+        print(f"{sub}: {len(os.listdir(sub_path))}")    
+
 def augment_images(dir_path, datagen, label, image_path):
     label_path = os.path.join(dir_path, label)
     total_cnt = 2000
@@ -55,12 +61,36 @@ def augment_images(dir_path, datagen, label, image_path):
     for batch in datagen.flow(x, batch_size=1, save_to_dir=label_path, save_prefix='generate', save_format='jpg'):
         if len(os.listdir(label_path)) == total_cnt:
             break
+        
+        
+def augment_dir_images(dir_path, datagen, labels):
+    total_generate_per_img = 5
+    total_img = 2000
+    for pc, label in enumerate(labels, 1):
+        label_path = os.path.join(dir_path, label)
+        for idx, img_name in enumerate(os.listdir(os.path.join(dir_path, label)), 1):
+            if len(os.listdir(label_path)) == total_img:
+                break
+            percent = idx / total_img *100
+            print(f"Processing: {label}, {percent:.2f}%")
+            i = 0
+            img_path = os.path.join(dir_path, label, img_name)
+            img_arr = load_img(img_path)
+            img_arr = img_to_array(img_arr)
+            img_arr = cv2.resize(img_arr, (75, 100))
+            img_arr = img_arr.reshape((1,) + img_arr.shape)
+            for batch in datagen.flow(img_arr, batch_size=1, save_to_dir=os.path.join(dir_path, label), save_prefix='generate', save_format='jpg'):
+                i += 1
+                if i == total_generate_per_img or len(os.listdir(label_path)) == total_img:
+                    break
+            
 
 def delete_img_dir(dir_path, label):
     for img in os.listdir(os.path.join(dir_path, label)):
         if img.startswith('generate'):
             img_path = os.path.join(dir_path, label, img)
             os.remove(img_path)
+
 
 # list_label_need = ['4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']
 
@@ -93,14 +123,17 @@ def delete_img_dir(dir_path, label):
 #     r"D:\Code_school_nam3ki2\TestModel\CNN letter Dataset\CNN letter Dataset\Z\aug7504_3.jpg"
 # ]
 
-# list_label_not_flip = ['4', '5', '6', '7', '9', 'B', 'C', 'D', 'E', 'F', 'G', 'K', 'L', 'N', 'P', 'S', 'U', 'Z']
-# list_label_can_flip = ['8', 'A', 'H', 'M', 'T', 'V', 'X', 'Y']
-    
-# for i in range(len(list_label_need)):
-#     if list_label_need[i] in list_label_not_flip:
+# list_label_not_flip = ['1', '2', '3', '4', '5', '6', '7', '9', 'B', 'C', 'D', 'E', 'F', 'G', 'K', 'L', 'N', 'P', 'S', 'U', 'Z']
+# list_label_can_flip = ['0','8', 'A', 'H', 'M', 'T', 'V', 'X', 'Y']
+
+path = r'D:\Code_school_nam3ki2\TestModel\CNN letter Dataset\CNN letter Dataset'
+# for i in range(len(labels)):
+#     if labels[i] in list_label_not_flip:
 #         datagen.horizontal_flip = False
-#         augment_images(dir_path, datagen, list_label_need[i], list_img_need[i])
+#         augment_dir_images(path, datagen, labels[i])
 #     else:
 #         datagen.horizontal_flip = True
-#         augment_images(dir_path, datagen, list_label_need[i], list_img_need[i])
+#         augment_dir_images(path, datagen, labels[i])
         
+        
+Check_file_cnt_in_folder(path)
