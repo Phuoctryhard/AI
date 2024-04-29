@@ -8,7 +8,6 @@ from keras_preprocessing.image import img_to_array, load_img, ImageDataGenerator
 from keras.callbacks import EarlyStopping
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
-import matplotlib.pyplot as plt
 IMG_DATA = 'CNN letter Dataset/CNN letter Dataset'
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print("Using Device: ", device)

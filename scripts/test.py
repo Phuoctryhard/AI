@@ -127,13 +127,4 @@ def delete_img_dir(dir_path, label):
 # list_label_can_flip = ['0','8', 'A', 'H', 'M', 'T', 'V', 'X', 'Y']
 
 path = r'D:\Code_school_nam3ki2\TestModel\CNN letter Dataset\CNN letter Dataset'
-# for i in range(len(labels)):
-#     if labels[i] in list_label_not_flip:
-#         datagen.horizontal_flip = False
-#         augment_dir_images(path, datagen, labels[i])
-#     else:
-#         datagen.horizontal_flip = True
-#         augment_dir_images(path, datagen, labels[i])
-        
-        
 Check_file_cnt_in_folder(path)

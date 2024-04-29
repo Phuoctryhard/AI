@@ -4,39 +4,51 @@ import tensorflow as tf
 from object_detection.utils import config_util
 from object_detection.protos import pipeline_pb2
 from google.protobuf import text_format
+import wget
 
 CUSTOM_MODEL_NAME = 'my_ssd_mobnet' 
 PRETRAINED_MODEL_NAME = 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'
 PRETRAINED_MODEL_URL = 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz'
 TF_RECORD_SCRIPT_NAME = 'generate_tfrecord.py'
 LABEL_MAP_NAME = 'label_map.pbtxt'
-MAIN_FOLDER_PATH = root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MAIN_FOLDER_PATH = root_path = os.getcwd()
 
 paths = {
-    'WORKSPACE_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace'),
-    'SCRIPTS_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow','scripts'),
-    'APIMODEL_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow','models'),
-    'ANNOTATION_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','annotations'),
-    'IMAGE_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','images'),
-    'MODEL_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models'),
-    'PRETRAINED_MODEL_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','pre-trained-models'),
-    'CHECKPOINT_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME), 
-    'OUTPUT_PATH': os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'export'), 
-    'TFJS_PATH':os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'tfjsexport'), 
-    'TFLITE_PATH':os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'tfliteexport'), 
-    'PROTOC_PATH':os.path.join(MAIN_FOLDER_PATH, 'Tensorflow','protoc')
+    'WORKSPACE_PATH': os.path.join('Tensorflow', 'workspace'),
+    'SCRIPTS_PATH': os.path.join('Tensorflow','scripts'),
+    'APIMODEL_PATH': os.path.join('Tensorflow','models'),
+    'ANNOTATION_PATH': os.path.join('Tensorflow', 'workspace','annotations'),
+    'IMAGE_PATH': os.path.join('Tensorflow', 'workspace','images'),
+    'MODEL_PATH': os.path.join('Tensorflow', 'workspace','models'),
+    'PRETRAINED_MODEL_PATH': os.path.join('Tensorflow', 'workspace','pre-trained-models'),
+    'CHECKPOINT_PATH': os.path.join('Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME), 
+    'OUTPUT_PATH': os.path.join('Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'export'), 
+    'TFJS_PATH':os.path.join('Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'tfjsexport'), 
+    'TFLITE_PATH':os.path.join('Tensorflow', 'workspace','models',CUSTOM_MODEL_NAME, 'tfliteexport'), 
+    'PROTOC_PATH':os.path.join('Tensorflow','protoc')
  }
 
 files = {
-    'PIPELINE_CONFIG':os.path.join(MAIN_FOLDER_PATH, 'Tensorflow', 'workspace','models', CUSTOM_MODEL_NAME, 'pipeline.config'),
-    'TF_RECORD_SCRIPT': os.path.join(MAIN_FOLDER_PATH, paths['SCRIPTS_PATH'], TF_RECORD_SCRIPT_NAME), 
-    'LABELMAP': os.path.join(MAIN_FOLDER_PATH, paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
+    'PIPELINE_CONFIG':os.path.join('Tensorflow', 'workspace','models', CUSTOM_MODEL_NAME, 'pipeline.config'),
+    'TF_RECORD_SCRIPT': os.path.join(paths['SCRIPTS_PATH'], TF_RECORD_SCRIPT_NAME), 
+    'LABELMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
 }
 
 # Create Directory Structure
 for path in paths.values():
     if not os.path.exists(path):
         os.makedirs(path)
+
+if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
+    os.system(f"git clone https://github.com/tensorflow/models {os.path.join(paths['APIMODEL_PATH'])}")
+
+os.system(f"apt-get install protobuf-compiler")
+os.system(f"cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && cp object_detection/packages/tf2/setup.py . && python -m pip install .")
+
+VERIFICATION_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'builders', 'model_builder_tf2_test.py')
+# Verify Installation
+os.system(f"python {VERIFICATION_SCRIPT}")
+
 
 # Create Label Map
 labels = [
@@ -55,6 +67,22 @@ command_train = f"python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMA
 command_test = f"python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'test')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'test.record')}"
 os.system(command_train)
 os.system(command_test)
+
+os.system(f"wget {PRETRAINED_MODEL_URL}")
+os.system(f"mv {PRETRAINED_MODEL_NAME+'.tar.gz'} {paths['PRETRAINED_MODEL_PATH']}")
+os.system(f"cd {paths['PRETRAINED_MODEL_PATH']} && tar -zxvf {PRETRAINED_MODEL_NAME+'.tar.gz'}")
+
+
+if not os.path.exists(files['TF_RECORD_SCRIPT']):
+    os.system(f"git clone https://github.com/nicknochnack/GenerateTFRecord {paths['SCRIPTS_PATH']}")
+    
+    
+os.system(f"python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'train')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'train.record')}")
+
+os.system(f"python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'test')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'test.record')}")
+
+os.system(f"cp {os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'pipeline.config')} {os.path.join(paths['CHECKPOINT_PATH'])}")
+
 
 # Update config file
 config = config_util.get_configs_from_pipeline_file(files['PIPELINE_CONFIG'])
