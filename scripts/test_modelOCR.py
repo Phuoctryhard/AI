@@ -7,11 +7,8 @@ from object_detection.utils import config_util
 import cv2
 import numpy as np
 from keras import models
-import cv2
 import numpy as np
 import re
-from cv2 import dnn_superres
-
 
 config_path = 'config\\pipeline.config'
 model_character_path = r'D:\Code_school_nam3ki2\TestModel\model\classfication_character\model_license_plate_v9.h5'
@@ -75,22 +72,6 @@ def predict_license_plate(img):
                 agnostic_mode=False) #Tất cả các hộp đều được vẽ cùng màu
     return image_np_with_detections, image_np_crop, detections['detection_boxes'][0]
 
-def improve_image_resolution(img, model_improve_path):
-    if "/" in model_improve_path:
-        model_name = model_improve_path.split("/")[-1].split(".")[0]
-    elif "\\" in model_improve_path:
-        model_name = model_improve_path.split("\\")[-1].split(".")[0]
-    else:
-        model_name = model_improve_path.split(".")[0]
-    model_name = model_name.lower()
-    model_number = int(re.findall(r"\d+", model_name)[0])
-    model_name = model_name.split("_")[0]
-    sr = dnn_superres.DnnSuperResImpl_create()  
-    sr.readModel(model_improve_path)
-    sr.setModel(model_name, model_number)
-    result = sr.upsample(img)
-    return result
-
 def get_detections(img, detections):
     img_crop = None
     ymin, xmin, ymax, xmax = detections
@@ -110,8 +91,6 @@ def get_detections(img, detections):
         img_crop = cv2.imread(os.path.join(result_folder_path, "cropped_image.jpg"))
         #Loại bỏ nhiễu 
         img_crop = cv2.fastNlMeansDenoisingColored(img_crop, None, 10, 10, 7, 21)
-        
-        
         
     return img_crop, X,Y,W,H
 

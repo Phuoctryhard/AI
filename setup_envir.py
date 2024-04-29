@@ -26,28 +26,32 @@ files = {
     'LABELMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
 }
 
-# # Create Directory Structure
-# for path in paths.values():
-#     if not os.path.exists(path):
-#         os.makedirs(path)
+# Create Directory Structure
+for path in paths.values():
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
-# if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
-#     os.system(f"git clone https://github.com/tensorflow/models {os.path.join(paths['APIMODEL_PATH'])}")
+if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
+    os.system(f"git clone https://github.com/tensorflow/models {os.path.join(paths['APIMODEL_PATH'])}")
 
-
-
-import wget
-if len(paths['PROTOC_PATH']) == 0:
-    url="https://github.com/protocolbuffers/protobuf/releases/download/v3.15.6/protoc-3.15.6-win64.zip"
-    wget.download(url)
-    os.system(f"move protoc-3.15.6-win64.zip {paths['PROTOC_PATH']}")
-    os.system(f"cd {paths['PROTOC_PATH']} && tar -xf protoc-3.15.6-win64.zip")
-os.environ['PATH'] += os.path.abspath(os.path.join(paths['PROTOC_PATH'], 'bin'))   
-
+########################################################################################
+# Install Tensorflow Object Detection, Protobuf and other dependencies
+# import wget
+# if len(os.listdir(paths['PROTOC_PATH'])) == 0:
+#     url="https://github.com/protocolbuffers/protobuf/releases/download/v3.15.6/protoc-3.15.6-win64.zip"
+#     wget.download(url)
+#     os.system(f"move protoc-3.15.6-win64.zip {paths['PROTOC_PATH']}")
+#     os.system(f"cd {paths['PROTOC_PATH']} && tar -xf protoc-3.15.6-win64.zip")
+    
+# os.environ['PATH'] += os.path.abspath(os.path.join(paths['PROTOC_PATH'], 'bin'))  
+ 
 
 # Compile protobuf files and install all required libraries
-# os.system("cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && copy object_detection\\packages\\tf2\\setup.py setup.py && python setup.py build && python setup.py install && cd Tensorflow/models/research/slim && pip install -e .")
+# os.system("cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && copy object_detection\\packages\\tf2\\setup.py setup.py && python setup.py build && python setup.py install")
+
+# os.system(f"cd Tensorflow/models/research/slim && pip install -e .")
+########################################################################################
 
 
 # Verify Installation
