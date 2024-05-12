@@ -12,6 +12,7 @@ import json
 import subprocess
 import requests
 import cv2
+from time import sleep
 config_path = 'config\\pipeline.config'
 model_character_path = r'D:\Code_school_nam3ki2\TestModel\model\classfication_character\model_license_plate_v9.h5'
 label_path = 'config\\label_map.pbtxt'
@@ -271,34 +272,77 @@ def send_to_esp8266(data, Mac_address):
         print(f"Không thể kết nối đến ESP8266: {e}")
         return None
 
-def camera_detect(model_character):
-    cap = cv2.VideoCapture(0)
-    print("Đang chờ nhận dạng biển số...")
-    while cap.isOpened():
-        try:
-            img_crop = None
-            ret, img = cap.read()
-            if not ret:
-                print("Không thể đọc từ camera.")
-                break
-            img = cv2.resize(img, (800, 600))
-            cv2.imshow('img', img)
-            image_np_with_detections, img, results = predict_license_plate(img)
-            if results is None:
-                print("Không tìm thấy biển số.")
-                continue
-            img_crop, X,Y,W,H = get_detections(img, results)
-            if img_crop is not None:
-                binary = pre_process(img_crop, W)
-                list_character = segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
-                print(list_character)
-            else:
-                print("Không tìm thấy biển số.")
-            if cv2.waitKey(10) == ord('q'):
-                break
-        except Exception as e:
-            print(f"Đã xảy ra lỗi: {e}")
-    cap.release()
-    cv2.destroyAllWindows()
+def get_command_from_esp8266(Mac_address):
+    ip = find_ip_by_mac(Mac_address)
+    if ip is None:
+        print(f"Không thể tìm thấy địa chỉ IP cho địa chỉ MAC {Mac_address}")
+        return None
+    try:
+        url = f"http://{ip}/doline"
+        response = requests.get(url)
+        if response.status_code == 200:
+            text = response.text
+            return text
+        else:
+            print(f"Lỗi khi gửi dữ liệu: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Không thể kết nối đến ESP8266: {e}")
+        return None
 
-camera_detect(model_character)
+def camera_detect(model_character, Mac_address):
+    cap = cv2.VideoCapture(0)
+    command = None
+    print("Chờ tín hiệu start từ ESP8266...")
+    try:
+        while command is None:
+            command = get_command_from_esp8266(Mac_address)
+            if command is not None:
+                command = command.strip()
+                print(f"Nhận lệnh từ ESP8266: {command}")
+                if command == "start":
+                    print("Bắt đầu nhận dạng biển số.")
+                    while cap.isOpened():
+                        try:
+                            text = None
+                            data = "1234"
+                            while text is None:
+                                text = send_to_esp8266(data, Mac_address)
+                                if text == "True":
+                                    print("Nhận dạng thành công.")
+                                    return
+                                else:
+                                    text = None
+                            # img_crop = None
+                            # ret, img = cap.read()
+                            # if not ret:
+                            #     print("Không thể đọc từ camera.")
+                            #     break
+                            # img = cv2.resize(img, (800, 600))
+                            # cv2.imshow('img', img)
+                            # image_np_with_detections, img, results = predict_license_plate(img)
+                            # if results is None:
+                            #     print("Không tìm thấy biển số.")
+                            #     continue
+                            # img_crop, X,Y,W,H = get_detections(img, results)
+                            # if img_crop is not None:
+                            #     binary = pre_process(img_crop, W)
+                            #     list_character = segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
+                            #     print(list_character)
+                            # else:
+                            #     print("Không tìm thấy biển số.")
+                            # if cv2.waitKey(10) == ord('q'):
+                            #     break
+                            sleep(5)
+                        except Exception as e:
+                            print(f"Đã xảy ra lỗi: {e}")
+                    cap.release()
+                    cv2.destroyAllWindows()
+                else:
+                    command = None        
+            sleep(2)
+    except Exception as e:
+        print(f"Đã xảy ra lỗi: {e}")
+        cap.release()
+        cv2.destroyAllWindows()
+camera_detect(model_character, "84-f3-eb-75-b0-2e")

@@ -24,7 +24,7 @@ files = {
     'LABELMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
 }
 
-# command_export = f"python {export_main_v2_path} --input_type image_tensor --pipeline_config_path {files['PIPELINE_CONFIG']} --trained_checkpoint_dir {paths['CHECKPOINT_PATH']} --output_directory {paths['EXPORTED_MODEL_PATH']}"
-command_export = f"python {export_main_v2_path} --input_type image_tensor --pipeline_config_path {files['PIPELINE_CONFIG']} --trained_checkpoint_dir {r"D:\Code_school_nam3ki2\TestModel\model\detect_liscense_plate"} --output_directory {r'D:\Code_school_nam3ki2\TestModel\check'}"
+command_export = f"python {export_main_v2_path} --input_type image_tensor --pipeline_config_path {files['PIPELINE_CONFIG']} --trained_checkpoint_dir {paths['CHECKPOINT_PATH']} --output_directory {paths['EXPORTED_MODEL_PATH']}"
+# command_export = f"python {export_main_v2_path} --input_type image_tensor --pipeline_config_path {files['PIPELINE_CONFIG']} --trained_checkpoint_dir {r"D:\Code_school_nam3ki2\TestModel\model\detect_liscense_plate"} --output_directory {r'D:\Code_school_nam3ki2\TestModel\check'}"
 
 os.system(command_export)
