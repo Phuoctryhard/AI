@@ -4,22 +4,21 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as viz_utils
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
-import cv2
 import numpy as np
 from keras import models
 import cv2
 import numpy as np
-import re
-from cv2 import dnn_superres
-
+import requests
+import json
+import subprocess
+import requests
 
 config_path = 'config\\pipeline.config'
 model_character_path = r'D:\Code_school_nam3ki2\TestModel\model\classfication_character\model_license_plate_v9.h5'
 label_path = 'config\\label_map.pbtxt'
-checkpoint_path = 'model\\detect_liscense_plate'
-test_folder_path = r'D:\car_long'
-result_folder_path = r'D:\Code_school_nam3ki2\TestModel\images_result'
-improve_img_resolution_file_path = r'D:\Code_school_nam3ki2\TestModel\model\improve_image_resolution\test.py'
+checkpoint_path = 'model\\detect_liscense_plate_v2'
+test_folder_path = r'D:\datasets-internet - Copy\train-data\images'
+result_folder_path = r'images_result'
 
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 category_index = label_map_util.create_category_index_from_labelmap(os.path.join(root_path, label_path))
@@ -29,7 +28,7 @@ detection_model = model_builder.build(model_config=configs['model'], is_training
 
 # Restore checkpoint
 ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
-ckpt.restore(os.path.join(root_path, checkpoint_path, 'ckpt-11')).expect_partial()
+ckpt.restore(os.path.join(root_path, checkpoint_path, 'ckpt-13')).expect_partial()
 
 model_character = models.load_model(model_character_path)
 
@@ -44,7 +43,6 @@ def pre_process(img, W):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     bfilter = cv2.bilateralFilter(img_gray, 11, 17, 17) #Noise reduction
     # blur = cv2.GaussianBlur(img_gray, (3, 3), 0)
-    # binary = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, int(W/10) if int(W/10)%2 !=0  else int(W/10)+1, 10)
     binary = cv2.adaptiveThreshold(bfilter, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, int(W/20) if int(W/20)%2 !=0  else int(W/20)+1, 15)
     return binary
 
@@ -72,24 +70,16 @@ def predict_license_plate(img):
                 category_index,
                 use_normalized_coordinates=True, #Chuấn hóa về 0 => 1
                 max_boxes_to_draw=1, 
+                min_score_thresh = 0.6,
                 agnostic_mode=False) #Tất cả các hộp đều được vẽ cùng màu
-    return image_np_with_detections, image_np_crop, detections['detection_boxes'][0]
-
-def improve_image_resolution(img, model_improve_path):
-    if "/" in model_improve_path:
-        model_name = model_improve_path.split("/")[-1].split(".")[0]
-    elif "\\" in model_improve_path:
-        model_name = model_improve_path.split("\\")[-1].split(".")[0]
-    else:
-        model_name = model_improve_path.split(".")[0]
-    model_name = model_name.lower()
-    model_number = int(re.findall(r"\d+", model_name)[0])
-    model_name = model_name.split("_")[0]
-    sr = dnn_superres.DnnSuperResImpl_create()  
-    sr.readModel(model_improve_path)
-    sr.setModel(model_name, model_number)
-    result = sr.upsample(img)
-    return result
+    score_threshold = 0.6
+    scores = [sc for sc in detections['detection_scores'] if sc > score_threshold]
+    boxes = detections['detection_boxes'][:len(scores)]
+    #Get the highest score
+    highest_score = max(scores) if scores else None
+    highest_score_index = scores.index(highest_score) if highest_score else None
+    box = boxes[highest_score_index] if highest_score_index is not None else None
+    return image_np_with_detections, image_np_crop, box
 
 def get_detections(img, detections):
     img_crop = None
@@ -110,12 +100,9 @@ def get_detections(img, detections):
         img_crop = cv2.imread(os.path.join(result_folder_path, "cropped_image.jpg"))
         #Loại bỏ nhiễu 
         img_crop = cv2.fastNlMeansDenoisingColored(img_crop, None, 10, 10, 7, 21)
-        
-        
-        
     return img_crop, X,Y,W,H
 
-def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, type = 0):
+def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, type = 0) :
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary, connectivity=8)
     print("Num_labels:", num_labels)
     candidates = []
@@ -175,8 +162,6 @@ def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, t
                 list_character_second.append(predict_image(save_path,model_character))
         list_character.extend(list_character_first)
         list_character.extend(list_character_second)
-        print("".join(list_character))
-
         for idx, (x, y,char)  in enumerate(second_lines):
         # Vẽ hình chữ nhật bao quanh ký tự
             cv2.rectangle(img, (x+int(X)-4, y+int(Y)-3), (x+int(X) + char.shape[1] - 6, y+int(Y) + char.shape[0] - 5), (0, 255, 0), 2)
@@ -195,8 +180,6 @@ def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, t
                 save_path = os.path.join(result_folder_path, filename)
                 cv2.imwrite(save_path, character[2])
                 list_character.append(predict_image(save_path,model_character))
-
-        print("".join(list_character))
         for idx, (x, y,char)  in enumerate(candidates):
         # Vẽ hình chữ nhật bao quanh ký tự
             cv2.rectangle(img, (x+int(X)-4, y+int(Y)-3), (x+int(X) + char.shape[1] - 6, y+int(Y) + char.shape[0] - 5), (0, 255, 0), 2)
@@ -206,104 +189,12 @@ def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, t
             
         # Hiển thị ảnh với các ký tự đã nhận dạng được vẽ lên
         cv2.imshow("Detected Characters", img)
+    # cv2.imshow("Detected Characters", img)
     if type == 0:
         cv2.waitKey()
         cv2.destroyAllWindows()
-
-def segmentation_character_test(binary, img, img_crop, model_character, X, Y, W, H, type = 0):
-    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary, connectivity=8)
-    print("Num_labels:", num_labels)
-    candidates = []
-    bounding_rects = []
-    list_character = []
-    i = 0
-    for label in range(1, num_labels):
-        # Tạo mask chứa các pixel có nhãn cùng là label
-        mask = np.zeros(binary.shape, dtype=np.uint8)
-        mask[labels == label] = 255 # Các các pixel cùng nhãn giá trị 255
-        # Tìm contours từ mask
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Lọc contours theo tiêu chí aspect ratio, solidity và height ratio
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            aspect_ratio = w / float(h)
-            solidity = cv2.contourArea(contour) / float(w * h)
-            height_ratio = h / float(binary.shape[0])
-
-
-            #Loại bỏ nhiễu dựa vào aspect ratio, solidity và height ratio
-            if 0.2 < aspect_ratio < 0.8 and solidity > 0.1 and 0.2 < height_ratio < 1.0:
-                bounding_rects.append((x, y, w, h))
-                # Trích xuất ký tự
-                character = img_crop[y-3: y + h+3, x-int(h*3/10-w/2):x + w+int(h*3/10-w/2)]
-                candidates.append((x, y, character))
-
-    if candidates[-1][1]/float(candidates[0][1]) > 2:  
-        list_character_first = []
-        list_character_second = []          
-        first_lines = [item for item in candidates if (candidates[-1][1]/float(item[1])) >= 2.0 ]
-        second_lines = [item for item in candidates if (candidates[-1][1]/float(item[1])) < 2.0 ]
-        first_lines.sort(key=lambda item: item[0])
-        first_lines = [item for item in first_lines]
-        second_lines.sort(key=lambda item: item[0])
-        second_lines = [item for item in second_lines]
-        for first_line in first_lines:
-                i+=1
-                filename = f"region_{i}.jpg"
-                save_path = os.path.join(result_folder_path, filename)
-                cv2.imwrite(save_path, first_line[2])
-                list_character_first.append(predict_image(save_path,model_character))
-
-        for idx, (x, y,char)  in enumerate(first_lines):
-        # Vẽ hình chữ nhật bao quanh ký tự
-            cv2.rectangle(img, (x+int(X)-4, y+int(Y)-3), (x+int(X) + char.shape[1] - 6, y+int(Y) + char.shape[0] - 5), (0, 255, 0), 2)
-        
-        # Hiển thị ký tự lên ảnh
-            cv2.putText(img, list_character_first[idx], (x+int(X)-3, y + int(Y)-3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)   
-                    
-        for second_line in second_lines:
-                i+=1
-                filename = f"region_{i}.jpg"
-                save_path = os.path.join(result_folder_path, filename)
-                cv2.imwrite(save_path, second_line[2])
-                list_character_second.append(predict_image(save_path,model_character))
-        list_character.extend(list_character_first)
-        list_character.extend(list_character_second)
-        print("".join(list_character))
-
-        for idx, (x, y,char)  in enumerate(second_lines):
-        # Vẽ hình chữ nhật bao quanh ký tự
-            cv2.rectangle(img, (x+int(X)-4, y+int(Y)-3), (x+int(X) + char.shape[1] - 6, y+int(Y) + char.shape[0] - 5), (0, 255, 0), 2)
-        
-        # Hiển thị ký tự lên ảnh
-            cv2.putText(img, list_character_second[idx], (x+int(X)-3, y + int(Y)-3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-    # Hiển thị ảnh với các ký tự đã nhận dạng được vẽ lên
-        cv2.imshow("Detected Characters", img)
-    else:
-        candidates.sort(key=lambda item: item[0])
-        candidates = [item for item in candidates]     
-        for character in candidates:
-                i+=1
-                filename = f"region_{i}.jpg"
-                save_path = os.path.join(result_folder_path, filename)
-                cv2.imwrite(save_path, character[2])
-                list_character.append(predict_image(save_path,model_character))
-
-        print("".join(list_character))
-        for idx, (x, y,char)  in enumerate(candidates):
-        # Vẽ hình chữ nhật bao quanh ký tự
-            cv2.rectangle(img, (x+int(X)-4, y+int(Y)-3), (x+int(X) + char.shape[1] - 6, y+int(Y) + char.shape[0] - 5), (0, 255, 0), 2)
     
-        # Hiển thị ký tự lên ảnh
-            cv2.putText(img, list_character[idx], (x+int(X)-3, y + int(Y)-3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            
-        # Hiển thị ảnh với các ký tự đã nhận dạng được vẽ lên
-        cv2.imshow("Detected Characters", img)
-    if type == 0:
-        cv2.waitKey()
-        cv2.destroyAllWindows()
+    return "".join(list_character)
 
 def predict_image(image_path, model):
     # img = improve_image_resolution(cv2.imread(image_path), "EDSR_x4.pb")
@@ -332,6 +223,9 @@ def predict_image_2(img, model):
 def image_detect(IMAGE_PATH, model_character):
     image_original = cv2.imread(IMAGE_PATH)
     image_np_with_detections, img, results = predict_license_plate(image_original)
+    if results is None:
+        print(f"Không tìm thấy biển số trong ảnh {IMAGE_PATH}")
+        return
     cv2.imshow('image_np_with_detections', image_np_with_detections)
     cv2.waitKey()
     cv2.destroyAllWindows()
@@ -345,8 +239,42 @@ def image_detect(IMAGE_PATH, model_character):
     cv2.destroyAllWindows()
     segmentation_character(binary, img, img_crop, model_character, X, Y, W, H)
 
+def find_ip_by_mac(target_mac):
+    # Sử dụng lệnh arp -a để lấy danh sách các thiết bị trong mạng local và thông tin ARP của chúng
+    cmd = ['arp', '-a']
+    returned_output = subprocess.check_output(cmd, shell=False, stderr=subprocess.STDOUT)
+    decoded_output = returned_output.decode('utf-8')
+    
+    # Tìm kiếm địa chỉ IP dựa trên địa chỉ MAC
+    lines = decoded_output.split('\n')
+    for line in lines:
+        if target_mac in line:
+            ip = line.split()[0]
+            return ip
+    # Trả về None nếu không tìm thấy địa chỉ IP cho địa chỉ MAC đích
+    return None
+
+def send_to_esp8266(data, Mac_address):
+    ip = find_ip_by_mac(Mac_address)
+    if ip is None:
+        print(f"Không thể tìm thấy địa chỉ IP cho địa chỉ MAC {Mac_address}")
+        return None
+    try:
+        url = f"http://{ip}/data?data={data}"
+        response = requests.get(url, data=data)
+        if response.status_code == 200:
+            text = response.text
+            return text
+        else:
+            print(f"Lỗi khi gửi dữ liệu: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Không thể kết nối đến ESP8266: {e}")
+        return None
+
 def camera_detect(model_character):
     cap = cv2.VideoCapture(0)
+    print("Đang chờ nhận dạng biển số...")
     while cap.isOpened():
         try:
             img_crop = None
@@ -355,23 +283,23 @@ def camera_detect(model_character):
                 print("Không thể đọc từ camera.")
                 break
             img = cv2.resize(img, (800, 600))
+            cv2.imshow('img', img)
             image_np_with_detections, img, results = predict_license_plate(img)
-            cv2.imshow('image_np_with_detections', image_np_with_detections)
+            if results is None:
+                print("Không tìm thấy biển số.")
+                continue
             img_crop, X,Y,W,H = get_detections(img, results)
             if img_crop is not None:
                 binary = pre_process(img_crop, W)
-                segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
+                list_character = segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
+                print(list_character)
             else:
                 print("Không tìm thấy biển số.")
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                cap.release()
-                cv2.destroyAllWindows()
+            if cv2.waitKey(10) == ord('q'):
                 break
         except Exception as e:
             print(f"Đã xảy ra lỗi: {e}")
+    cap.release()
+    cv2.destroyAllWindows()
 
-listIMGTest = os.listdir(test_folder_path)
-listIMGTest = [os.path.join(test_folder_path, img) for img in listIMGTest]
-
-for img_path in listIMGTest:
-    image_detect(img_path, model_character)
+camera_detect(model_character)
