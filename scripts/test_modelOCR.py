@@ -6,13 +6,12 @@ from object_detection.builders import model_builder
 from object_detection.utils import config_util
 import numpy as np
 from keras import models
-import cv2
 import numpy as np
 import requests
 import json
 import subprocess
 import requests
-
+import cv2
 config_path = 'config\\pipeline.config'
 model_character_path = r'D:\Code_school_nam3ki2\TestModel\model\classfication_character\model_license_plate_v9.h5'
 label_path = 'config\\label_map.pbtxt'

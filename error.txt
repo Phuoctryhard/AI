@@ -1,0 +1,31 @@
+#No mudule name XXX (thiếu thư viện)
+pip install XXX hoặc search google để tải về các thư viện bị thiếu nếu không có trong phần các lỗi hay gặp
+
+Các lỗi hay gặp:
+- No mudule name Tensorflow:
+==> pip install tensorflow==2.13, nếu bị lỗi thì pip install tensorflow==2.15
+
+- TypeError: Descriptors cannot be created directly.
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
+If you cannot immediately regenerate your protos, some other possible workarounds are:
+ 1. Downgrade the protobuf package to 3.20.x or lower.
+ 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+==> pip install protobuf==3.20.*
+
+-ModuleNotFoundError: No module named 'cycler'
+==> pip install cycler
+
+-ModuleNotFoundError: No module named 'dateutil'
+==> pip install python-dateutil
+
+-ModuleNotFoundError: No module named 'kiwisolver'
+==> pip install kiwisolver
+
+-ModuleNotFoundError: No module named 'yaml'
+==>pip install PyYaml
+
+-No module named 'pytz':
+==> pip install pytz
+
+-No module named 'gin':
+==> pip install gin-config==0.1.1
