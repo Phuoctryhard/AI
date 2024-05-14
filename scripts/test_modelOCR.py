@@ -81,6 +81,38 @@ def predict_license_plate(img):
     box = boxes[highest_score_index] if highest_score_index is not None else None
     return image_np_with_detections, image_np_crop, box
 
+
+
+def preprocess_img_crop(img):
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    bfilter = cv2.bilateralFilter(img_gray, 11, 17, 17) #Noise reduction
+    img_blur = cv2.GaussianBlur(bfilter, (3, 3), 0)
+    # Chuyển đổi ảnh sang nhị phân
+    ret, img_bin = cv2.threshold(img_blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # Đảo ngược ảnh (nền đen, chữ trắng)
+    img_bin = 255 - img_bin
+    return img_bin
+
+def rotation_img_crop(img, img_bin):
+    # Tìm các đường viền
+    contours, _ = cv2.findContours(255 - img_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Lọc ra đường viền của biển số dựa trên diện tích
+    license_plate_contour = max(contours, key=cv2.contourArea)
+    # Tìm hình chữ nhật nhỏ nhất bao quanh đường viền
+    rect = cv2.minAreaRect(license_plate_contour)
+    # Tính góc nghiêng của hình chữ nhật
+    angle = rect[2]
+    # Nếu góc lớn hơn 45 độ, điều chỉnh lại để góc nghiêng nằm trong khoảng từ -45 đến 45 độ
+    if angle > 45:
+        angle = -(90 - angle)
+    # Xoay ảnh theo góc nghiêng
+    (h, w) = img.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    print("Góc nghiêng của biển số so với trục Ox: ", angle)
+    return rotated
+
 def get_detections(img, detections):
     img_crop = None
     ymin, xmin, ymax, xmax = detections
@@ -123,7 +155,6 @@ def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, t
             solidity = cv2.contourArea(contour) / float(w * h)
             height_ratio = h / float(binary.shape[0])
 
-
             #Loại bỏ nhiễu dựa vào aspect ratio, solidity và height ratio
             if 0.2 < aspect_ratio < 0.8 and solidity > 0.1 and 0.2 < height_ratio < 1.0:
                 bounding_rects.append((x, y, w, h))
@@ -145,7 +176,7 @@ def segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, t
                 filename = f"region_{i}.jpg"
                 save_path = os.path.join(result_folder_path, filename)
                 cv2.imwrite(save_path, first_line[2])
-                list_character_first.append(predict_image(save_path,model_character))
+                list_character_first.append(predict_image(save_path, model_character))
 
         for idx, (x, y,char)  in enumerate(first_lines):
         # Vẽ hình chữ nhật bao quanh ký tự
@@ -220,6 +251,7 @@ def predict_image_2(img, model):
     predicted_label = labels[np.argmax(pred)]
     return predicted_label
 
+
 def image_detect(IMAGE_PATH, model_character):
     image_original = cv2.imread(IMAGE_PATH)
     image_np_with_detections, img, results = predict_license_plate(image_original)
@@ -233,11 +265,15 @@ def image_detect(IMAGE_PATH, model_character):
     cv2.imshow('img_crop', img_crop)
     cv2.waitKey()
     cv2.destroyAllWindows()
-    binary = pre_process(img_crop, W)
+    img_crop_rotation = rotation_img_crop(img_crop, preprocess_img_crop(img_crop))
+    cv2.imshow('img_crop_rotation', img_crop_rotation)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
+    binary = pre_process(img_crop_rotation, W)
     cv2.imshow('binary', binary)
     cv2.waitKey()
     cv2.destroyAllWindows()
-    segmentation_character(binary, img, img_crop, model_character, X, Y, W, H)
+    print(segmentation_character(binary, img, img_crop, model_character, X, Y, W, H))
 
 def find_ip_by_mac(target_mac):
     # Sử dụng lệnh arp -a để lấy danh sách các thiết bị trong mạng local và thông tin ARP của chúng
@@ -291,58 +327,69 @@ def get_command_from_esp8266(Mac_address):
         return None
 
 def camera_detect(model_character, Mac_address):
-    cap = cv2.VideoCapture(0)
     command = None
     print("Chờ tín hiệu start từ ESP8266...")
     try:
-        while command is None:
+        while True:
+            isDetect = False
             command = get_command_from_esp8266(Mac_address)
+            print(f"Nhận lệnh từ ESP8266: {command}")
             if command is not None:
                 command = command.strip()
-                print(f"Nhận lệnh từ ESP8266: {command}")
                 if command == "start":
-                    print("Bắt đầu nhận dạng biển số.")
+                    print("Bắt đầu mở camera nhận dạng biển số.")
+                    cap = cv2.VideoCapture(0)
                     while cap.isOpened():
                         try:
-                            text = None
-                            data = "1234"
-                            while text is None:
-                                text = send_to_esp8266(data, Mac_address)
-                                if text == "True":
-                                    print("Nhận dạng thành công.")
-                                    return
-                                else:
-                                    text = None
-                            # img_crop = None
-                            # ret, img = cap.read()
-                            # if not ret:
-                            #     print("Không thể đọc từ camera.")
-                            #     break
-                            # img = cv2.resize(img, (800, 600))
-                            # cv2.imshow('img', img)
-                            # image_np_with_detections, img, results = predict_license_plate(img)
-                            # if results is None:
-                            #     print("Không tìm thấy biển số.")
-                            #     continue
-                            # img_crop, X,Y,W,H = get_detections(img, results)
-                            # if img_crop is not None:
-                            #     binary = pre_process(img_crop, W)
-                            #     list_character = segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
-                            #     print(list_character)
-                            # else:
-                            #     print("Không tìm thấy biển số.")
-                            # if cv2.waitKey(10) == ord('q'):
-                            #     break
-                            sleep(5)
+                            img_crop = None
+                            ret, img = cap.read()
+                            if not ret:
+                                print("Không thể đọc từ camera.")
+                                break
+                            img = cv2.resize(img, (800, 600))
+                            cv2.imshow('img', img)
+                            image_np_with_detections, img, results = predict_license_plate(img)
+                            if results is None:
+                                print("Không tìm thấy biển số.")
+                                continue
+                            img_crop, X,Y,W,H = get_detections(img, results)
+                            if img_crop is not None:
+                                binary = pre_process(img_crop, W)
+                                list_character = segmentation_character(binary, img, img_crop, model_character, X, Y, W, H, 1)
+                                print(f"Biển số: {list_character}")
+                                text = None
+                                while text is None:
+                                    text = send_to_esp8266(list_character, Mac_address)
+                                    if text == "Biển số đã đăng kí":
+                                        print("Nhận dạng thành công.")
+                                        isDetect = True
+                                        break
+                                    elif text == "Biển số chưa đăng kí":
+                                        print("Nhận dạng chưa thành công")
+                                        isDetect = False
+                                if isDetect:
+                                    break
+                            else:
+                                print("Không tìm thấy biển số.")
+                            if cv2.waitKey(10) == ord('q'):
+                                break
                         except Exception as e:
                             print(f"Đã xảy ra lỗi: {e}")
                     cap.release()
                     cv2.destroyAllWindows()
-                else:
-                    command = None        
-            sleep(2)
     except Exception as e:
         print(f"Đã xảy ra lỗi: {e}")
         cap.release()
         cv2.destroyAllWindows()
-camera_detect(model_character, "84-f3-eb-75-b0-2e")
+        
+# camera_detect(model_character, "84-f3-eb-75-b0-2e")
+list_test = os.listdir(test_folder_path)
+list_test = [os.path.join(test_folder_path, l) for l in list_test]
+list_test = sorted(list_test, reverse=True)
+for image_path in list_test:
+    try:
+        image_detect(image_path, model_character)
+    except Exception as e:
+        print(f"Lỗi: {e}")
+        
+# image_detect(r"D:\Code_school_nam3ki2\TestModel\download.jpg", model_character)
