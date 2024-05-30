@@ -1,4 +1,5 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as viz_utils
@@ -31,7 +32,10 @@ files = {
     'LABELMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
 }
 
-TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
+TRAINING_SCRIPT = os.path.join(MAIN_FOLDER_PATH, r'scripts\model_main_tf2.py')
 
-command = "python {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
+checkpoint_path = paths["CHECKPOINT_PATH"]
+savepoint_path = paths["CHECKPOINT_PATH"]
+
+command = "python {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={} --alsologtostderr".format(TRAINING_SCRIPT, savepoint_path , files['PIPELINE_CONFIG'], checkpoint_path)
 os.system(f"{command}")

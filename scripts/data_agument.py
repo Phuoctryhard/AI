@@ -91,8 +91,5 @@ def delete_img_dir(dir_path, label):
             img_path = os.path.join(dir_path, label, img)
             os.remove(img_path)
 
-# list_label_not_flip = ['1', '2', '3', '4', '5', '6', '7', '9', 'B', 'C', 'D', 'E', 'F', 'G', 'K', 'L', 'N', 'P', 'S', 'U', 'Z']
-# list_label_can_flip = ['0','8', 'A', 'H', 'M', 'T', 'V', 'X', 'Y']
-
 path = r'D:\Code_school_nam3ki2\TestModel\CNN letter Dataset\CNN letter Dataset'
 Check_file_cnt_in_folder(path)

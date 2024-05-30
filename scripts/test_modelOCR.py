@@ -81,8 +81,6 @@ def predict_license_plate(img):
     box = boxes[highest_score_index] if highest_score_index is not None else None
     return image_np_with_detections, image_np_crop, box
 
-
-
 def preprocess_img_crop(img):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     bfilter = cv2.bilateralFilter(img_gray, 11, 17, 17) #Noise reduction
@@ -384,12 +382,15 @@ def camera_detect(model_character, Mac_address):
         
 # camera_detect(model_character, "84-f3-eb-75-b0-2e")
 list_test = os.listdir(test_folder_path)
-list_test = [os.path.join(test_folder_path, l) for l in list_test]
+list_test = [os.path.join(test_folder_path, l) for l in list_test if not l.endswith(".xml")]
 list_test = sorted(list_test, reverse=True)
-for image_path in list_test:
+for i, image_path in enumerate(list_test, 1):
+    percentage = (i/len(list_test))*100
+    print(f"Đang xử lý ảnh {i}/{len(list_test)} ({percentage:.2f}%)")
     try:
         image_detect(image_path, model_character)
     except Exception as e:
         print(f"Lỗi: {e}")
         
 # image_detect(r"D:\Code_school_nam3ki2\TestModel\download.jpg", model_character)
+# python D:\Code_school_nam3ki2\TestModel\scripts\confusion_matrix.py --detections_record=D:\Code_school_nam3ki2\TestModel\Tensorflow\workspace\annotations\test.record --label_map=D:\Code_school_nam3ki2\TestModel\config\label_map.pbtxt --output_path=confusion_matrix.csv
