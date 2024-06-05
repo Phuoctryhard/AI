@@ -1,0 +1,385 @@
+                                                                                                                             Layer       Input Shape  Parameters
+            ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalBoxHead/BoxPredictor/depthwise_kernel:0    (3, 3, 128, 1)        1152
+            ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalBoxHead/BoxPredictor/pointwise_kernel:0   (1, 1, 128, 24)        3072
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalBoxHead/BoxPredictor/bias:0              (24)          24
+        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalClassHead/ClassPredictor/depthwise_kernel:0    (3, 3, 128, 1)        1152
+        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalClassHead/ClassPredictor/pointwise_kernel:0   (1, 1, 128, 12)        1536
+                    ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/WeightSharedConvolutionalClassHead/ClassPredictor/bias:0              (12)          12
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/depthwise_kernel:0    (3, 3, 128, 1)        1152
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_0/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_0/beta:0             (128)         128
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/depthwise_kernel:0    (3, 3, 128, 1)        1152
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_0/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_0/beta:0             (128)         128
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/depthwise_kernel:0    (3, 3, 128, 1)        1152
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_0/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_0/beta:0             (128)         128
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/depthwise_kernel:0    (3, 3, 128, 1)        1152
+                                 ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_0/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_0/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_1/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_1/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_1/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_1/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_1/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_1/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_1/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_1/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_2/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_2/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_2/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_2/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_2/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_2/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_2/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_2/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_3/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_3/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_3/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_3/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_3/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_3/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_3/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_3/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_4/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_4/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_4/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_4/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_4/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_4/beta:0             (128)         128
+                        ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_4/gamma:0             (128)         128
+                         ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_4/beta:0             (128)         128
+             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_depthwise_conv/depthwise_kernel:0    (3, 3, 128, 1)        1152
+             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_depthwise_conv/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_batchnorm/gamma:0             (128)         128
+                              ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_batchnorm/beta:0             (128)         128
+             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_depthwise_conv/depthwise_kernel:0    (3, 3, 128, 1)        1152
+             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_depthwise_conv/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                             ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_batchnorm/gamma:0             (128)         128
+                              ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_batchnorm/beta:0             (128)         128
+                                                                                                                    Conv1/kernel:0     (3, 3, 3, 32)         864
+                                                                                                                  bn_Conv1/gamma:0              (32)          32
+                                                                                                                   bn_Conv1/beta:0              (32)          32
+                                                                                        expanded_conv_depthwise/depthwise_kernel:0     (3, 3, 32, 1)         288
+                                                                                                expanded_conv_depthwise_BN/gamma:0              (32)          32
+                                                                                                 expanded_conv_depthwise_BN/beta:0              (32)          32
+                                                                                                    expanded_conv_project/kernel:0    (1, 1, 32, 16)         512
+                                                                                                  expanded_conv_project_BN/gamma:0              (16)          16
+                                                                                                   expanded_conv_project_BN/beta:0              (16)          16
+                                                                                                           block_1_expand/kernel:0    (1, 1, 16, 96)        1536
+                                                                                                         block_1_expand_BN/gamma:0              (96)          96
+                                                                                                          block_1_expand_BN/beta:0              (96)          96
+                                                                                              block_1_depthwise/depthwise_kernel:0     (3, 3, 96, 1)         864
+                                                                                                      block_1_depthwise_BN/gamma:0              (96)          96
+                                                                                                       block_1_depthwise_BN/beta:0              (96)          96
+                                                                                                          block_1_project/kernel:0    (1, 1, 96, 24)        2304
+                                                                                                        block_1_project_BN/gamma:0              (24)          24
+                                                                                                         block_1_project_BN/beta:0              (24)          24
+                                                                                                           block_2_expand/kernel:0   (1, 1, 24, 144)        3456
+                                                                                                         block_2_expand_BN/gamma:0             (144)         144
+                                                                                                          block_2_expand_BN/beta:0             (144)         144
+                                                                                              block_2_depthwise/depthwise_kernel:0    (3, 3, 144, 1)        1296
+                                                                                                      block_2_depthwise_BN/gamma:0             (144)         144
+                                                                                                       block_2_depthwise_BN/beta:0             (144)         144
+                                                                                                          block_2_project/kernel:0   (1, 1, 144, 24)        3456
+                                                                                                        block_2_project_BN/gamma:0              (24)          24
+                                                                                                         block_2_project_BN/beta:0              (24)          24
+                                                                                                           block_3_expand/kernel:0   (1, 1, 24, 144)        3456
+                                                                                                         block_3_expand_BN/gamma:0             (144)         144
+                                                                                                          block_3_expand_BN/beta:0             (144)         144
+                                                                                              block_3_depthwise/depthwise_kernel:0    (3, 3, 144, 1)        1296
+                                                                                                      block_3_depthwise_BN/gamma:0             (144)         144
+                                                                                                       block_3_depthwise_BN/beta:0             (144)         144
+                                                                                                          block_3_project/kernel:0   (1, 1, 144, 32)        4608
+                                                                                                        block_3_project_BN/gamma:0              (32)          32
+                                                                                                         block_3_project_BN/beta:0              (32)          32
+                                                                                                           block_4_expand/kernel:0   (1, 1, 32, 192)        6144
+                                                                                                         block_4_expand_BN/gamma:0             (192)         192
+                                                                                                          block_4_expand_BN/beta:0             (192)         192
+                                                                                              block_4_depthwise/depthwise_kernel:0    (3, 3, 192, 1)        1728
+                                                                                                      block_4_depthwise_BN/gamma:0             (192)         192
+                                                                                                       block_4_depthwise_BN/beta:0             (192)         192
+                                                                                                          block_4_project/kernel:0   (1, 1, 192, 32)        6144
+                                                                                                        block_4_project_BN/gamma:0              (32)          32
+                                                                                                         block_4_project_BN/beta:0              (32)          32
+                                                                                                           block_5_expand/kernel:0   (1, 1, 32, 192)        6144
+                                                                                                         block_5_expand_BN/gamma:0             (192)         192
+                                                                                                          block_5_expand_BN/beta:0             (192)         192
+                                                                                              block_5_depthwise/depthwise_kernel:0    (3, 3, 192, 1)        1728
+                                                                                                      block_5_depthwise_BN/gamma:0             (192)         192
+                                                                                                       block_5_depthwise_BN/beta:0             (192)         192
+                                                                                                          block_5_project/kernel:0   (1, 1, 192, 32)        6144
+                                                                                                        block_5_project_BN/gamma:0              (32)          32
+                                                                                                         block_5_project_BN/beta:0              (32)          32
+                                                                                                           block_6_expand/kernel:0   (1, 1, 32, 192)        6144
+                                                                                                         block_6_expand_BN/gamma:0             (192)         192
+                                                                                                          block_6_expand_BN/beta:0             (192)         192
+                                                                                              block_6_depthwise/depthwise_kernel:0    (3, 3, 192, 1)        1728
+                                                                                                      block_6_depthwise_BN/gamma:0             (192)         192
+                                                                                                       block_6_depthwise_BN/beta:0             (192)         192
+                                                                                                          block_6_project/kernel:0   (1, 1, 192, 64)       12288
+                                                                                                        block_6_project_BN/gamma:0              (64)          64
+                                                                                                         block_6_project_BN/beta:0              (64)          64
+                                                                                                           block_7_expand/kernel:0   (1, 1, 64, 384)       24576
+                                                                                                         block_7_expand_BN/gamma:0             (384)         384
+                                                                                                          block_7_expand_BN/beta:0             (384)         384
+                                                                                              block_7_depthwise/depthwise_kernel:0    (3, 3, 384, 1)        3456
+                                                                                                      block_7_depthwise_BN/gamma:0             (384)         384
+                                                                                                       block_7_depthwise_BN/beta:0             (384)         384
+                                                                                                          block_7_project/kernel:0   (1, 1, 384, 64)       24576
+                                                                                                        block_7_project_BN/gamma:0              (64)          64
+                                                                                                         block_7_project_BN/beta:0              (64)          64
+                                                                                                           block_8_expand/kernel:0   (1, 1, 64, 384)       24576
+                                                                                                         block_8_expand_BN/gamma:0             (384)         384
+                                                                                                          block_8_expand_BN/beta:0             (384)         384
+                                                                                              block_8_depthwise/depthwise_kernel:0    (3, 3, 384, 1)        3456
+                                                                                                      block_8_depthwise_BN/gamma:0             (384)         384
+                                                                                                       block_8_depthwise_BN/beta:0             (384)         384
+                                                                                                          block_8_project/kernel:0   (1, 1, 384, 64)       24576
+                                                                                                        block_8_project_BN/gamma:0              (64)          64
+                                                                                                         block_8_project_BN/beta:0              (64)          64
+                                                                                                           block_9_expand/kernel:0   (1, 1, 64, 384)       24576
+                                                                                                         block_9_expand_BN/gamma:0             (384)         384
+                                                                                                          block_9_expand_BN/beta:0             (384)         384
+                                                                                              block_9_depthwise/depthwise_kernel:0    (3, 3, 384, 1)        3456
+                                                                                                      block_9_depthwise_BN/gamma:0             (384)         384
+                                                                                                       block_9_depthwise_BN/beta:0             (384)         384
+                                                                                                          block_9_project/kernel:0   (1, 1, 384, 64)       24576
+                                                                                                        block_9_project_BN/gamma:0              (64)          64
+                                                                                                         block_9_project_BN/beta:0              (64)          64
+                                                                                                          block_10_expand/kernel:0   (1, 1, 64, 384)       24576
+                                                                                                        block_10_expand_BN/gamma:0             (384)         384
+                                                                                                         block_10_expand_BN/beta:0             (384)         384
+                                                                                             block_10_depthwise/depthwise_kernel:0    (3, 3, 384, 1)        3456
+                                                                                                     block_10_depthwise_BN/gamma:0             (384)         384
+                                                                                                      block_10_depthwise_BN/beta:0             (384)         384
+                                                                                                         block_10_project/kernel:0   (1, 1, 384, 96)       36864
+                                                                                                       block_10_project_BN/gamma:0              (96)          96
+                                                                                                        block_10_project_BN/beta:0              (96)          96
+                                                                                                          block_11_expand/kernel:0   (1, 1, 96, 576)       55296
+                                                                                                        block_11_expand_BN/gamma:0             (576)         576
+                                                                                                         block_11_expand_BN/beta:0             (576)         576
+                                                                                             block_11_depthwise/depthwise_kernel:0    (3, 3, 576, 1)        5184
+                                                                                                     block_11_depthwise_BN/gamma:0             (576)         576
+                                                                                                      block_11_depthwise_BN/beta:0             (576)         576
+                                                                                                         block_11_project/kernel:0   (1, 1, 576, 96)       55296
+                                                                                                       block_11_project_BN/gamma:0              (96)          96
+                                                                                                        block_11_project_BN/beta:0              (96)          96
+                                                                                                          block_12_expand/kernel:0   (1, 1, 96, 576)       55296
+                                                                                                        block_12_expand_BN/gamma:0             (576)         576
+                                                                                                         block_12_expand_BN/beta:0             (576)         576
+                                                                                             block_12_depthwise/depthwise_kernel:0    (3, 3, 576, 1)        5184
+                                                                                                     block_12_depthwise_BN/gamma:0             (576)         576
+                                                                                                      block_12_depthwise_BN/beta:0             (576)         576
+                                                                                                         block_12_project/kernel:0   (1, 1, 576, 96)       55296
+                                                                                                       block_12_project_BN/gamma:0              (96)          96
+                                                                                                        block_12_project_BN/beta:0              (96)          96
+                                                                                                          block_13_expand/kernel:0   (1, 1, 96, 576)       55296
+                                                                                                        block_13_expand_BN/gamma:0             (576)         576
+                                                                                                         block_13_expand_BN/beta:0             (576)         576
+                                                                                             block_13_depthwise/depthwise_kernel:0    (3, 3, 576, 1)        5184
+                                                                                                     block_13_depthwise_BN/gamma:0             (576)         576
+                                                                                                      block_13_depthwise_BN/beta:0             (576)         576
+                                                                                                         block_13_project/kernel:0  (1, 1, 576, 160)       92160
+                                                                                                       block_13_project_BN/gamma:0             (160)         160
+                                                                                                        block_13_project_BN/beta:0             (160)         160
+                                                                                                          block_14_expand/kernel:0  (1, 1, 160, 960)      153600
+                                                                                                        block_14_expand_BN/gamma:0             (960)         960
+                                                                                                         block_14_expand_BN/beta:0             (960)         960
+                                                                                             block_14_depthwise/depthwise_kernel:0    (3, 3, 960, 1)        8640
+                                                                                                     block_14_depthwise_BN/gamma:0             (960)         960
+                                                                                                      block_14_depthwise_BN/beta:0             (960)         960
+                                                                                                         block_14_project/kernel:0  (1, 1, 960, 160)      153600
+                                                                                                       block_14_project_BN/gamma:0             (160)         160
+                                                                                                        block_14_project_BN/beta:0             (160)         160
+                                                                                                          block_15_expand/kernel:0  (1, 1, 160, 960)      153600
+                                                                                                        block_15_expand_BN/gamma:0             (960)         960
+                                                                                                         block_15_expand_BN/beta:0             (960)         960
+                                                                                             block_15_depthwise/depthwise_kernel:0    (3, 3, 960, 1)        8640
+                                                                                                     block_15_depthwise_BN/gamma:0             (960)         960
+                                                                                                      block_15_depthwise_BN/beta:0             (960)         960
+                                                                                                         block_15_project/kernel:0  (1, 1, 960, 160)      153600
+                                                                                                       block_15_project_BN/gamma:0             (160)         160
+                                                                                                        block_15_project_BN/beta:0             (160)         160
+                                                                                                          block_16_expand/kernel:0  (1, 1, 160, 960)      153600
+                                                                                                        block_16_expand_BN/gamma:0             (960)         960
+                                                                                                         block_16_expand_BN/beta:0             (960)         960
+                                                                                             block_16_depthwise/depthwise_kernel:0    (3, 3, 960, 1)        8640
+                                                                                                     block_16_depthwise_BN/gamma:0             (960)         960
+                                                                                                      block_16_depthwise_BN/beta:0             (960)         960
+                                                                                                         block_16_project/kernel:0  (1, 1, 960, 320)      307200
+                                                                                                       block_16_project_BN/gamma:0             (320)         320
+                                                                                                        block_16_project_BN/beta:0             (320)         320
+                                                                                                                   Conv_1/kernel:0 (1, 1, 320, 1280)      409600
+                                                                                                                 Conv_1_bn/gamma:0            (1280)        1280
+                                                                                                                  Conv_1_bn/beta:0            (1280)        1280
+                        ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_3/kernel:0 (1, 1, 1280, 128)      163840
+                          ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_3/bias:0             (128)         128
+                        ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_2/kernel:0   (1, 1, 96, 128)       12288
+                          ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_2/bias:0             (128)         128
+                        ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_1/kernel:0   (1, 1, 32, 128)        4096
+                          ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/projection_1/bias:0             (128)         128
+ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_depthwise_conv/depthwise_kernel:0    (3, 3, 128, 1)        1152
+ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_depthwise_conv/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_batchnorm/gamma:0             (128)         128
+                 ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_batchnorm/beta:0             (128)         128
+ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_depthwise_conv/depthwise_kernel:0    (3, 3, 128, 1)        1152
+ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_depthwise_conv/pointwise_kernel:0  (1, 1, 128, 128)       16384
+                ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_batchnorm/gamma:0             (128)         128
+                 ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_batchnorm/beta:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_0/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_0/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_0/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_0/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_0/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_0/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_0/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_0/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_1/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_1/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_1/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_1/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_1/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_1/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_1/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_1/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_2/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_2/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_2/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_2/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_2/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_2/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_2/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_2/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_3/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_3/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_3/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_3/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_3/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_3/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_3/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_3/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_4/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_0/BatchNorm/feature_4/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_4/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_1/BatchNorm/feature_4/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_4/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_2/BatchNorm/feature_4/moving_variance:0             (128)         128
+                  ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_4/moving_mean:0             (128)         128
+              ssd_meta_arch_1/WeightSharedConvolutionalBoxPredictor/PredictionTower/conv2d_3/BatchNorm/feature_4/moving_variance:0             (128)         128
+                       ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_batchnorm/moving_mean:0             (128)         128
+                   ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_20_batchnorm/moving_variance:0             (128)         128
+                       ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_batchnorm/moving_mean:0             (128)         128
+                   ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/bottom_up_Conv2d_21_batchnorm/moving_variance:0             (128)         128
+                                                                                                            bn_Conv1/moving_mean:0              (32)          32
+                                                                                                        bn_Conv1/moving_variance:0              (32)          32
+                                                                                          expanded_conv_depthwise_BN/moving_mean:0              (32)          32
+                                                                                      expanded_conv_depthwise_BN/moving_variance:0              (32)          32
+                                                                                            expanded_conv_project_BN/moving_mean:0              (16)          16
+                                                                                        expanded_conv_project_BN/moving_variance:0              (16)          16
+                                                                                                   block_1_expand_BN/moving_mean:0              (96)          96
+                                                                                               block_1_expand_BN/moving_variance:0              (96)          96
+                                                                                                block_1_depthwise_BN/moving_mean:0              (96)          96
+                                                                                            block_1_depthwise_BN/moving_variance:0              (96)          96
+                                                                                                  block_1_project_BN/moving_mean:0              (24)          24
+                                                                                              block_1_project_BN/moving_variance:0              (24)          24
+                                                                                                   block_2_expand_BN/moving_mean:0             (144)         144
+                                                                                               block_2_expand_BN/moving_variance:0             (144)         144
+                                                                                                block_2_depthwise_BN/moving_mean:0             (144)         144
+                                                                                            block_2_depthwise_BN/moving_variance:0             (144)         144
+                                                                                                  block_2_project_BN/moving_mean:0              (24)          24
+                                                                                              block_2_project_BN/moving_variance:0              (24)          24
+                                                                                                   block_3_expand_BN/moving_mean:0             (144)         144
+                                                                                               block_3_expand_BN/moving_variance:0             (144)         144
+                                                                                                block_3_depthwise_BN/moving_mean:0             (144)         144
+                                                                                            block_3_depthwise_BN/moving_variance:0             (144)         144
+                                                                                                  block_3_project_BN/moving_mean:0              (32)          32
+                                                                                              block_3_project_BN/moving_variance:0              (32)          32
+                                                                                                   block_4_expand_BN/moving_mean:0             (192)         192
+                                                                                               block_4_expand_BN/moving_variance:0             (192)         192
+                                                                                                block_4_depthwise_BN/moving_mean:0             (192)         192
+                                                                                            block_4_depthwise_BN/moving_variance:0             (192)         192
+                                                                                                  block_4_project_BN/moving_mean:0              (32)          32
+                                                                                              block_4_project_BN/moving_variance:0              (32)          32
+                                                                                                   block_5_expand_BN/moving_mean:0             (192)         192
+                                                                                               block_5_expand_BN/moving_variance:0             (192)         192
+                                                                                                block_5_depthwise_BN/moving_mean:0             (192)         192
+                                                                                            block_5_depthwise_BN/moving_variance:0             (192)         192
+                                                                                                  block_5_project_BN/moving_mean:0              (32)          32
+                                                                                              block_5_project_BN/moving_variance:0              (32)          32
+                                                                                                   block_6_expand_BN/moving_mean:0             (192)         192
+                                                                                               block_6_expand_BN/moving_variance:0             (192)         192
+                                                                                                block_6_depthwise_BN/moving_mean:0             (192)         192
+                                                                                            block_6_depthwise_BN/moving_variance:0             (192)         192
+                                                                                                  block_6_project_BN/moving_mean:0              (64)          64
+                                                                                              block_6_project_BN/moving_variance:0              (64)          64
+                                                                                                   block_7_expand_BN/moving_mean:0             (384)         384
+                                                                                               block_7_expand_BN/moving_variance:0             (384)         384
+                                                                                                block_7_depthwise_BN/moving_mean:0             (384)         384
+                                                                                            block_7_depthwise_BN/moving_variance:0             (384)         384
+                                                                                                  block_7_project_BN/moving_mean:0              (64)          64
+                                                                                              block_7_project_BN/moving_variance:0              (64)          64
+                                                                                                   block_8_expand_BN/moving_mean:0             (384)         384
+                                                                                               block_8_expand_BN/moving_variance:0             (384)         384
+                                                                                                block_8_depthwise_BN/moving_mean:0             (384)         384
+                                                                                            block_8_depthwise_BN/moving_variance:0             (384)         384
+                                                                                                  block_8_project_BN/moving_mean:0              (64)          64
+                                                                                              block_8_project_BN/moving_variance:0              (64)          64
+                                                                                                   block_9_expand_BN/moving_mean:0             (384)         384
+                                                                                               block_9_expand_BN/moving_variance:0             (384)         384
+                                                                                                block_9_depthwise_BN/moving_mean:0             (384)         384
+                                                                                            block_9_depthwise_BN/moving_variance:0             (384)         384
+                                                                                                  block_9_project_BN/moving_mean:0              (64)          64
+                                                                                              block_9_project_BN/moving_variance:0              (64)          64
+                                                                                                  block_10_expand_BN/moving_mean:0             (384)         384
+                                                                                              block_10_expand_BN/moving_variance:0             (384)         384
+                                                                                               block_10_depthwise_BN/moving_mean:0             (384)         384
+                                                                                           block_10_depthwise_BN/moving_variance:0             (384)         384
+                                                                                                 block_10_project_BN/moving_mean:0              (96)          96
+                                                                                             block_10_project_BN/moving_variance:0              (96)          96
+                                                                                                  block_11_expand_BN/moving_mean:0             (576)         576
+                                                                                              block_11_expand_BN/moving_variance:0             (576)         576
+                                                                                               block_11_depthwise_BN/moving_mean:0             (576)         576
+                                                                                           block_11_depthwise_BN/moving_variance:0             (576)         576
+                                                                                                 block_11_project_BN/moving_mean:0              (96)          96
+                                                                                             block_11_project_BN/moving_variance:0              (96)          96
+                                                                                                  block_12_expand_BN/moving_mean:0             (576)         576
+                                                                                              block_12_expand_BN/moving_variance:0             (576)         576
+                                                                                               block_12_depthwise_BN/moving_mean:0             (576)         576
+                                                                                           block_12_depthwise_BN/moving_variance:0             (576)         576
+                                                                                                 block_12_project_BN/moving_mean:0              (96)          96
+                                                                                             block_12_project_BN/moving_variance:0              (96)          96
+                                                                                                  block_13_expand_BN/moving_mean:0             (576)         576
+                                                                                              block_13_expand_BN/moving_variance:0             (576)         576
+                                                                                               block_13_depthwise_BN/moving_mean:0             (576)         576
+                                                                                           block_13_depthwise_BN/moving_variance:0             (576)         576
+                                                                                                 block_13_project_BN/moving_mean:0             (160)         160
+                                                                                             block_13_project_BN/moving_variance:0             (160)         160
+                                                                                                  block_14_expand_BN/moving_mean:0             (960)         960
+                                                                                              block_14_expand_BN/moving_variance:0             (960)         960
+                                                                                               block_14_depthwise_BN/moving_mean:0             (960)         960
+                                                                                           block_14_depthwise_BN/moving_variance:0             (960)         960
+                                                                                                 block_14_project_BN/moving_mean:0             (160)         160
+                                                                                             block_14_project_BN/moving_variance:0             (160)         160
+                                                                                                  block_15_expand_BN/moving_mean:0             (960)         960
+                                                                                              block_15_expand_BN/moving_variance:0             (960)         960
+                                                                                               block_15_depthwise_BN/moving_mean:0             (960)         960
+                                                                                           block_15_depthwise_BN/moving_variance:0             (960)         960
+                                                                                                 block_15_project_BN/moving_mean:0             (160)         160
+                                                                                             block_15_project_BN/moving_variance:0             (160)         160
+                                                                                                  block_16_expand_BN/moving_mean:0             (960)         960
+                                                                                              block_16_expand_BN/moving_variance:0             (960)         960
+                                                                                               block_16_depthwise_BN/moving_mean:0             (960)         960
+                                                                                           block_16_depthwise_BN/moving_variance:0             (960)         960
+                                                                                                 block_16_project_BN/moving_mean:0             (320)         320
+                                                                                             block_16_project_BN/moving_variance:0             (320)         320
+                                                                                                           Conv_1_bn/moving_mean:0            (1280)        1280
+                                                                                                       Conv_1_bn/moving_variance:0            (1280)        1280
+          ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_batchnorm/moving_mean:0             (128)         128
+      ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_2_batchnorm/moving_variance:0             (128)         128
+          ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_batchnorm/moving_mean:0             (128)         128
+      ssd_meta_arch_1/ssd_mobile_net_v2_fpn_keras_feature_extractor_1/FeatureMaps/top_down/smoothing_1_batchnorm/moving_variance:0             (128)         128

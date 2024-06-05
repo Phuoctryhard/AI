@@ -5,7 +5,7 @@ from object_detection.utils import visualization_utils as viz_utils
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
 import numpy as np
-import cv2
+import pandas as pd
 
 config_path = r'model\detect_license_plate\pipeline.config'
 label_path = r'config\label_map.pbtxt'
@@ -23,6 +23,38 @@ ckpt.restore(os.path.join(MAIN_FOLDER_PATH, checkpoint_path)).expect_partial()
 dummy_input = tf.random.uniform((1, 320, 320, 3))
 
 dummy_output = detection_model(dummy_input)
-
+total_params = 0
+total_train_params = 0
+total_untrain_params = 0
+layer_cnt = 0
+list_layer = []
+list_input_shape = []
+list_param = []
 for var in detection_model.variables:
-    print(var.name, var.shape)
+    layer_cnt += 1
+    num_params = np.prod(var.shape)
+    total_params += num_params
+    if var.trainable:
+        total_train_params += num_params
+    else:
+        total_untrain_params += num_params
+    list_layer.append(var.name)
+    list_input_shape.append(var.shape)
+    list_param.append(num_params)
+
+data = {
+    "Layer": list_layer,
+    "Input Shape": list_input_shape,
+    "Parameters": list_param
+}
+df = pd.DataFrame(data)
+
+pd.set_option('display.max_rows', None)
+
+# Print the table
+print(df.to_string(index=False))
+print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+print("Total Layers: ", layer_cnt)
+print("Total Parameters: ", total_params)
+print("Total Trainable Parameters: ", total_train_params)
+print("Total Untrainable Parameters: ", total_untrain_params)
